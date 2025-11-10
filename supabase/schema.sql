@@ -110,99 +110,122 @@ ALTER TABLE weight_tracking ENABLE ROW LEVEL SECURITY;
 ALTER TABLE daily_summaries ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for users table
+DROP POLICY IF EXISTS "Users can view their own profile" ON users;
 CREATE POLICY "Users can view their own profile"
     ON users FOR SELECT
     USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can update their own profile" ON users;
 CREATE POLICY "Users can update their own profile"
     ON users FOR UPDATE
     USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can insert their own profile" ON users;
 CREATE POLICY "Users can insert their own profile"
     ON users FOR INSERT
     WITH CHECK (auth.uid() = id);
 
 -- RLS Policies for daily_goals table
+DROP POLICY IF EXISTS "Users can view their own goals" ON daily_goals;
 CREATE POLICY "Users can view their own goals"
     ON daily_goals FOR SELECT
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own goals" ON daily_goals;
 CREATE POLICY "Users can insert their own goals"
     ON daily_goals FOR INSERT
     WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own goals" ON daily_goals;
 CREATE POLICY "Users can update their own goals"
     ON daily_goals FOR UPDATE
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own goals" ON daily_goals;
 CREATE POLICY "Users can delete their own goals"
     ON daily_goals FOR DELETE
     USING (auth.uid() = user_id);
 
 -- RLS Policies for food_entries table
+DROP POLICY IF EXISTS "Users can view their own food entries" ON food_entries;
 CREATE POLICY "Users can view their own food entries"
     ON food_entries FOR SELECT
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own food entries" ON food_entries;
 CREATE POLICY "Users can insert their own food entries"
     ON food_entries FOR INSERT
     WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own food entries" ON food_entries;
 CREATE POLICY "Users can update their own food entries"
     ON food_entries FOR UPDATE
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own food entries" ON food_entries;
 CREATE POLICY "Users can delete their own food entries"
     ON food_entries FOR DELETE
     USING (auth.uid() = user_id);
 
 -- RLS Policies for photos table
+DROP POLICY IF EXISTS "Users can view their own photos" ON photos;
 CREATE POLICY "Users can view their own photos"
     ON photos FOR SELECT
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own photos" ON photos;
 CREATE POLICY "Users can insert their own photos"
     ON photos FOR INSERT
     WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own photos" ON photos;
 CREATE POLICY "Users can update their own photos"
     ON photos FOR UPDATE
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own photos" ON photos;
 CREATE POLICY "Users can delete their own photos"
     ON photos FOR DELETE
     USING (auth.uid() = user_id);
 
 -- RLS Policies for weight_tracking table
+DROP POLICY IF EXISTS "Users can view their own weight entries" ON weight_tracking;
 CREATE POLICY "Users can view their own weight entries"
     ON weight_tracking FOR SELECT
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own weight entries" ON weight_tracking;
 CREATE POLICY "Users can insert their own weight entries"
     ON weight_tracking FOR INSERT
     WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own weight entries" ON weight_tracking;
 CREATE POLICY "Users can update their own weight entries"
     ON weight_tracking FOR UPDATE
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own weight entries" ON weight_tracking;
 CREATE POLICY "Users can delete their own weight entries"
     ON weight_tracking FOR DELETE
     USING (auth.uid() = user_id);
 
 -- RLS Policies for daily_summaries table
+DROP POLICY IF EXISTS "Users can view their own daily summaries" ON daily_summaries;
 CREATE POLICY "Users can view their own daily summaries"
     ON daily_summaries FOR SELECT
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own daily summaries" ON daily_summaries;
 CREATE POLICY "Users can insert their own daily summaries"
     ON daily_summaries FOR INSERT
     WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own daily summaries" ON daily_summaries;
 CREATE POLICY "Users can update their own daily summaries"
     ON daily_summaries FOR UPDATE
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete their own daily summaries" ON daily_summaries;
 CREATE POLICY "Users can delete their own daily summaries"
     ON daily_summaries FOR DELETE
     USING (auth.uid() = user_id);
@@ -215,6 +238,29 @@ BEGIN
     RETURN NEW;
 END;
 $$ language 'plpgsql';
+
+-- Function to automatically create user profile when a user signs up
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO public.users (id, email, name, created_at, updated_at)
+    VALUES (
+        NEW.id,
+        NEW.email,
+        COALESCE(NEW.raw_user_meta_data->>'name', NULL),
+        NOW(),
+        NOW()
+    )
+    ON CONFLICT (id) DO NOTHING;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger to create user profile when auth user is created
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- Create triggers to automatically update updated_at
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
