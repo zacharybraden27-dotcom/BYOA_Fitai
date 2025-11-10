@@ -59,7 +59,11 @@ class HomeViewModel: ObservableObject {
     
     var calorieProgress: Double {
         guard let goal = dailyGoal, goal.dailyCalorieGoal > 0 else { return 0 }
-        return min(dailyTotals.calories / Double(goal.dailyCalorieGoal), 1.0)
+        
+        let ratio = dailyTotals.calories / Double(goal.dailyCalorieGoal)
+        guard ratio.isFinite else { return 0 }
+        
+        return min(max(ratio, 0), 1)
     }
 }
 

@@ -62,10 +62,14 @@ struct DailyProgressCard: View {
                     Rectangle()
                         .fill(Color.gray.opacity(0.2))
                         .frame(height: 30)
+
+                    let clampedProgress = progress.isFinite ? min(max(progress, 0), 1) : 0
+                    let width = geometry.size.width.isFinite ? geometry.size.width : 0
+                    let barWidth = width * CGFloat(clampedProgress)
                     
                     Rectangle()
                         .fill(isAchieved ? Color.green : Color.blue)
-                        .frame(width: geometry.size.width * progress, height: 30)
+                        .frame(width: max(0, barWidth), height: 30)
                 }
                 .cornerRadius(15)
             }
