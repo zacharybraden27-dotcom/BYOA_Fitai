@@ -133,8 +133,9 @@ FitAI
    ```swift
    static let backendURL = "https://your-backend-url.com"
    static let apiKey = "your-api-key"
-   static let aiServiceAPIKey = "your-ai-api-key"
+   static let geminiAPIKey = ProcessInfo.processInfo.environment["GEMINI_API_KEY"] ?? "your-gemini-api-key"
    ```
+3. **Recommended:** Store your Gemini key in an environment variable instead of hard-coding it. For example, in your Xcode scheme, set `GEMINI_API_KEY` under *Edit Scheme → Run → Arguments → Environment Variables*.
 
 ## Step 8: Build and Run
 

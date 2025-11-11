@@ -95,33 +95,33 @@ FitAI/
 
 ### Phase 1: Foundation
 - [x] Project setup and configuration
-- [ ] Backend service selection and setup (Supabase/Firebase) - **In Progress: Preparing Supabase integration**
+- [x] Backend service selection and setup (Supabase) - **Supabase project configured**
   - [x] Mock data service for development
-  - [ ] Supabase project setup
-  - [ ] Supabase configuration
+  - [x] Supabase project setup
+  - [x] Supabase configuration
 - [x] AI service selection and setup (OpenAI/Food API) - Mock implementation ready
 - [x] Basic app structure and navigation
 - [x] Authentication system
-  - [x] Sign up (mock)
-  - [x] Sign in (mock)
+  - [x] Sign up (Supabase)
+  - [x] Sign in (Supabase)
   - [x] Sign out
   - [ ] Password reset
   - [x] Session management (local storage)
 
 ### Phase 2: Database Integration & User Goals
 - [x] Database schema design
-- [ ] Database service implementation - **In Progress: Setting up Supabase**
+- [x] Database service implementation - **Complete: Supabase integration active**
   - [x] Mock data service implemented (for testing)
-  - [ ] Supabase backend setup
-  - [ ] Supabase service integration
+  - [x] Supabase backend setup
+  - [x] Supabase service integration
 - [x] User profile setup - Models ready
 - [x] Goal setting system - Models and service methods ready
   - [x] Weight goal (target weight) - Model supports it
   - [x] Daily calorie intake goal - Model supports it
   - [x] Daily calorie deficit/surplus goal - Model supports it
   - [x] Macro targets (protein, carbs, fats) - Model supports it
-- [x] CRUD operations for goals - Service methods implemented (mock)
-- [ ] Data synchronization - **Pending: Supabase integration**
+- [x] CRUD operations for goals - Service methods implemented and connected to Supabase
+- [x] Data synchronization with Supabase backend
 - [ ] Offline support (if applicable) - **Pending: Supabase setup**
 
 ### Phase 3: Photo Capture & AI Analysis
@@ -129,17 +129,17 @@ FitAI/
   - [x] Photo capture from camera - PhotosPicker supports camera access
   - [x] Photo selection from gallery - PhotosPicker implemented
   - [ ] Image preprocessing and optimization - Basic implementation
-- [x] AI service integration
-  - [x] API integration for food recognition - Mock implementation ready
-  - [x] Photo upload to AI service - Mock service accepts images
-  - [x] Parse AI response for food items - FoodAnalysisResult model
+- [ ] AI service integration - Mock-only placeholder (real provider pending)
+  - [ ] API integration for food recognition - Mock implementation only
+  - [ ] Photo upload to AI service - Mock placeholder
+  - [x] Parse AI response for food items - `FoodAnalysisResult` model
   - [x] Extract macronutrients (calories, protein, carbs, fats) - Done
   - [ ] Handle multiple food items in one photo - Single item for now
   - [x] Error handling for unclear/unrecognized food - Basic error handling
 - [x] Food entry creation
   - [x] Manual editing of AI-detected food - Can edit in AddFoodEntryView
   - [x] Manual food entry option - Full manual entry form
-  - [x] Save food entries with photos - Photo URL field in model
+  - [ ] Save food entries with photos - Upload & storage integration pending
   - [x] Associate food entries with meals (breakfast, lunch, dinner, snack) - Meal type selector
 
 ### Phase 4: Daily Tracking & Progress
@@ -156,11 +156,11 @@ FitAI/
   - [ ] Push notifications for goal milestones (optional)
 
 ### Phase 5: History & Analytics
-- [ ] Historical data view
+- [ ] Historical data view - Calendar and filtering pending (list & detail in place)
   - [ ] Calendar view of past days
   - [ ] Visual indicators for goal achievement (green/red indicators)
   - [ ] Filter by date range
-  - [ ] View detailed daily breakdown
+  - [x] View detailed daily breakdown
 - [ ] Statistics and insights
   - [ ] Weekly/monthly averages
   - [ ] Goal achievement rate
@@ -378,7 +378,7 @@ FitAI/
 
 ### Phase 1: Setup & Authentication (Week 1-2)
 - [x] Initialize Xcode project with SwiftUI
-- [x] Set up backend service (Supabase/Firebase) - Mock data service for now
+- [x] Set up backend service (Supabase) - Supabase integration active
 - [x] Set up AI service (OpenAI/Food API) - Mock implementation ready
 - [x] Implement authentication flows (sign up, sign in, sign out)
 - [x] Create basic navigation structure (TabView)
@@ -386,17 +386,17 @@ FitAI/
 
 ### Phase 2: Database Schema & User Goals (Week 2-3)
 - [x] Design and implement database schema - Models created
-- [ ] Create database service layer - **In Progress: Supabase integration**
+- [x] Create database service layer - Supabase + mock services available
   - [x] DatabaseService with mock data (for development)
-  - [ ] Supabase service wrapper
-  - [ ] Supabase database tables creation
+  - [x] Supabase service wrapper
+  - [x] Supabase database tables creation
 - [x] Implement user profile management - User model and ProfileView
-- [ ] Build goal setting UI and functionality - Models ready, UI needs implementation
+- [x] Build goal setting UI and functionality - Goals view + sheet live
 - [x] Allow users to set weight goals and daily calorie targets - Models support it
-- [ ] Store and retrieve user goals - **Pending: Supabase integration**
-  - [x] Service methods implemented (mock)
-  - [ ] Supabase RLS policies
-  - [ ] Supabase API integration
+- [x] Store and retrieve user goals - Supabase-backed
+  - [x] Service methods implemented
+  - [x] Supabase RLS policies
+  - [x] Supabase API integration
 
 ### Phase 3: Camera & Photo Integration (Week 3-4)
 - [x] Implement camera access and permissions - PhotosPicker handles this
@@ -406,9 +406,9 @@ FitAI/
 - [ ] Create photo service for upload/download - PhotoService exists but needs implementation
 
 ### Phase 4: AI Food Analysis (Week 4-5)
-- [x] Integrate AI service API - Mock implementation ready
-- [x] Implement photo upload to AI service - Mock service accepts images
-- [x] Parse AI response for food items and macros - FoodAnalysisResult model
+- [ ] Integrate AI service API - Mock placeholder, real provider pending
+- [ ] Implement photo upload to AI service - Mock placeholder
+- [x] Parse AI response for food items and macros - `FoodAnalysisResult` model
 - [ ] Handle multiple food items in single photo - Single item for now
 - [x] Implement error handling for unrecognized food - Basic error handling
 - [x] Add manual editing capability for AI results - Can edit in AddFoodEntryView
@@ -552,22 +552,20 @@ FitAI/
 
 ## Notes
 
-### Implementation Decisions
-- **Mock Data Service**: Implemented MockDataService for testing and development. All services check `AppConfig.useMockData` flag before making network calls. This allows full app functionality testing without backend setup.
-- **Backend**: **Currently using mock data. Supabase integration in progress.**
+- **Mock Data Service**: Implemented `MockDataService` for testing and development. All services check `AppConfig.useMockData` before making network calls so the app can run entirely offline for demos.
+- **Backend**: **Supabase integration is active in the app.**
   - Supabase service wrapper created (`SupabaseService.swift`)
   - Database schema SQL created (`supabase/schema.sql`)
   - Setup guide created (`SUPABASE_SETUP.md`)
-  - Ready for Supabase project setup and integration
+  - App services now read/write through Supabase endpoints
 - **Demo Credentials**: `demo@fitai.com` / `demo123` - Pre-populated with sample food entries and goals (mock data)
 - **AI Service**: Currently using mock implementation that returns random food items. Ready for real AI service integration (OpenAI GPT-4 Vision, etc.)
 - **Architecture**: MVVM pattern with SwiftUI. All ViewModels are marked with `@MainActor` for thread safety.
 
 ### Known Issues
 - Password reset functionality not yet implemented
-- Photo storage service exists but needs full implementation
-- Goal setting UI needs to be built (models and services are ready)
-- History view is placeholder (needs implementation)
+- Photo storage flows depend on Supabase bucket configuration and UI surfacing
+- History calendar/analytics UI still outstanding
 - Multiple food items in single photo not yet supported
 
 ### Completed Features
@@ -606,38 +604,37 @@ FitAI/
 
 ---
 
-**Last Updated**: January 2025
+**Last Updated**: November 2025
 **Version**: 1.0.0
 
 ## Progress Summary
 
 ### Completed Phases
-- ✅ **Phase 1: Foundation** - Mostly complete (backend setup in progress)
-- 🚧 **Phase 2: Database Integration & User Goals** - **In Progress: Setting up Supabase**
-- ✅ **Phase 3: Photo Capture & AI Analysis** - Mostly complete (photo storage needs implementation)
-- ✅ **Phase 4: Daily Tracking & Progress** - Complete (with mock data)
-- ✅ **Phase 5: Food Entry & Daily Tracking** - Complete (with mock data)
+- ✅ **Phase 1: Foundation** - Complete
+- ✅ **Phase 2: Database Integration & User Goals** - Supabase-powered flows live
+- ✅ **Phase 3: Photo Capture & AI Analysis** - Mock AI + photo flows in place (storage polish pending)
+- ✅ **Phase 4: Daily Tracking & Progress** - Complete with Supabase data
+- ✅ **Phase 5: Food Entry & Daily Tracking** - Complete with Supabase data
 
 ### Current Status
-- ✅ Mock data service fully functional for testing
-- ✅ Authentication system working with demo credentials (mock)
-- ✅ Food entry creation (manual and AI photo analysis) implemented
-- ✅ Daily tracking dashboard fully functional
-- 🚧 **Setting up Supabase backend integration**
-- ⏳ Backend database tables need to be created in Supabase
-- ⏳ Supabase authentication needs to be configured
-- ⏳ Supabase API endpoints need to be integrated
+- ✅ Supabase authentication and database calls enabled in-app
+- ✅ Mock data service still available for offline demos
+- ✅ Goals view + editing connected to Supabase data
+- ✅ History list and detail views reading from Supabase
+- 🚧 AI service still mock-only (needs real provider)
+- 🚧 Photo storage requires Supabase bucket configuration and UI surfacing
+- 🚧 Analytics/calendar visualizations pending
 
 ### Next Steps
-1. **Complete Supabase Setup** (Current Priority)
-   - Set up Supabase project
-   - Create database tables
-   - Configure authentication
-   - Set up RLS policies
-   - Integrate Supabase SDK
-2. Update services to use Supabase instead of mock data
-3. Implement History & Analytics (Phase 5)
-4. Build goal setting UI
-5. Implement photo storage service with Supabase Storage
-6. Add password reset functionality
+1. **Integrate Real AI Service**
+   - Hook `AIService` into selected provider (OpenAI / Food API)
+   - Support multi-item recognition and improved error states
+2. **Finalize Photo Storage Experience**
+   - Configure Supabase storage bucket policies
+   - Persist photo URLs and surface images in UI
+3. **History & Analytics Enhancements (Phase 5)**
+   - Calendar view with goal achievement indicators
+   - Trend charts and filters
+4. **Implement Password Reset**
+5. **Plan Offline Caching Strategy (if required)**
 
