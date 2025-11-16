@@ -12,10 +12,10 @@ VALUES (
     'food-photos',
     'food-photos',
     false, -- Set to true if you want public access, false for private (requires signed URLs)
-    5242880, -- 5MB file size limit (adjust as needed)
+    20971520, -- 20MB file size limit (increased to allow larger images)
     ARRAY['image/jpeg', 'image/jpg', 'image/png', 'image/heic', 'image/heif'] -- Allowed image types
 )
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET file_size_limit = 20971520;
 
 -- ============================================================================
 -- STORAGE POLICIES (Row Level Security for Storage)
